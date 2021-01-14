@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Ruby Critic - Home</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- StyleSheets -->
+    <link href="../assets/stylesheets/bootstrap.min.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+    <link href="../assets/stylesheets/font-awesome.min.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+    <link href="../assets/stylesheets/prettify.custom_theme.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+    <link href="../assets/stylesheets/application.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+    <header class="navbar navbar-default navbar-fixed-top">
+      <a href="#menu-toggle" class="btn btn-default hidden-lg visible-sm-* hidden-md visible-xs-* pull-left" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a>
+      <a href="../overview.html"><img src="../assets/images/logo.png" alt="Ruby Critic Logo" title="Ruby Critic Logo" width="55"><span class="logo">RUBYCRITIC</span></a>
+      
+    </header>
+    <div id="wrapper">
+      <!-- Sidebar -->
+      <aside id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+          <li class="sidebar-item">
+            <a href="../overview.html" class="project-nav-item overview-nav"><i class="fa fa-dashboard"></i>Overview</a>
+          </li>
+          <li class="sidebar-item">
+            <a href="../code_index.html" class="project-nav-item code-index-nav"><i class="fa fa-code"></i>Code</a>
+          </li>
+          <li class="sidebar-item">
+            <a href="../smells_index.html" class="project-nav-item smells-index-nav"><i class="fa fa-warning"></i>Smells</a>
+          </li>
+          <li class="sidebar-item">
+            <a href="../simple_cov_index.html" class="project-nav-item coverage-index-nav"><i class="fa fa-umbrella"></i>Coverage</a>
+          </li>
+        </ul>
+      </aside>
+      <!-- /#sidebar-wrapper -->
+      <div id="page-content-wrapper">
+        <div class="container-fluid">
+          <div class="row">
+  <!--Page Title -->
+  <div class="Page_Title">
+    <div class="file-time">
+      <span class="committed-at">
+        
+          Updated <time class='js-timeago' datetime='2021-01-13 18:17:23 -0600'>2021-01-13 18:17:23 -0600</time>
+        
+      </span>
+    </div>
+    <div>
+      <h3><small>koans /</small> about_proxy_object_project.rb</h3>
+    </div>
+  </div>
+  <!--End Page Title -->
+  <div class="Content_Wrapper">
+    <!-- code detail -->
+    <div class="code-top-detail clearfix row">
+      <div class="col-md-8">
+        <div class="row">
+          <div class="col-md-1">
+            <div class="rating c big">
+              C
+            </div>
+          </div>
+          <div class="code-statistics col-md-11">
+            <div class="col-md-3">
+              <div><span class="metric">175</span><small> lines of codes</small></div>
+              <div><span class="metric">17</span><small> methods</small></div>
+            </div>
+            <div class="col-md-3">
+              <div><span class="metric">6.0</span><small> complexity/method</small></div>
+              <div><span class="metric">3</span><small> churn</small></div>
+            </div>
+            <div class="col-md-3">
+              <div><span class="metric">101.31</span><small> complexity</small></div>
+              <div><span class="metric">0</span><small> duplications</small></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="code-tabs">
+          <ul class="nav nav-pills right-to-left">
+            <li><a href="#" id="toggle-code" class="toggle-button button">code</a></li>
+            <li class="active">
+              <a href="#" id="toggle-smells" class="toggle-button button">
+                0
+                smell
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <code class="prettyprint linenums lang-ruby file-code js-file-code"># frozen_string_literal: true
+
+require File.expand_path(&quot;#{File.dirname(__FILE__)}/neo&quot;)
+
+# Project: Create a Proxy Class
+#
+# In this assignment, create a proxy class (one is started for you
+# below).  You should be able to initialize the proxy object with any
+# object.  Any messages sent to the proxy object should be forwarded
+# to the target object.  As each message is sent, the proxy should
+# record the name of the method sent.
+#
+# The proxy class is started for you.  You will need to add a method
+# missing handler and any other supporting methods.  The specification
+# of the Proxy class is given in the AboutProxyObjectProject koan.
+
+attr_reader :messages
+
+class Proxy
+  def initialize(target_object)
+    @object = target_object
+    @messages = []
+  end
+
+  def called?(method_name)
+    @messages.include? method_name
+  end
+
+  def number_of_times_called(method_name)
+    @messages.count method_name
+  end
+
+  def method_missing(method_name, *args, &amp;block)
+    if @object.respond_to? method_name
+      @messages.push method_name
+
+      @object.send method_name, *args
+    else
+      super method_name, *args, &amp;block
+    end
+  end
+end
+
+# The proxy object should pass the following Koan:
+#
+class AboutProxyObjectProject &lt; Neo::Koan
+  def test_proxy_method_returns_wrapped_object
+    # NOTE: The Television class is defined below
+    tv = Proxy.new(Television.new)
+
+    # HINT: Proxy class is defined above, may need tweaking...
+
+    assert tv.instance_of?(Proxy)
+  end
+
+  def test_tv_methods_still_perform_their_function
+    tv = Proxy.new(Television.new)
+
+    tv.channel = 10
+    tv.power
+
+    assert_equal 10, tv.channel
+    assert tv.on?
+  end
+
+  def test_proxy_records_messages_sent_to_tv
+    tv = Proxy.new(Television.new)
+
+    tv.power
+    tv.channel = 10
+
+    assert_equal %i[power channel=], tv.messages
+  end
+
+  def test_proxy_handles_invalid_messages
+    tv = Proxy.new(Television.new)
+
+    assert_raise(NoMethodError) do
+      tv.no_such_method
+    end
+  end
+
+  def test_proxy_reports_methods_have_been_called
+    tv = Proxy.new(Television.new)
+
+    tv.power
+    tv.power
+
+    assert tv.called?(:power)
+    assert !tv.called?(:channel)
+  end
+
+  def test_proxy_counts_method_calls
+    tv = Proxy.new(Television.new)
+
+    tv.power
+    tv.channel = 48
+    tv.power
+
+    assert_equal 2, tv.number_of_times_called(:power)
+    assert_equal 1, tv.number_of_times_called(:channel=)
+    assert_equal 0, tv.number_of_times_called(:on?)
+  end
+
+  def test_proxy_can_record_more_than_just_tv_objects
+    proxy = Proxy.new(&#39;Code Mash 2009&#39;)
+
+    proxy.upcase!
+    result = proxy.split
+
+    assert_equal %w[CODE MASH 2009], result
+    assert_equal %i[upcase! split], proxy.messages
+  end
+end
+
+# ====================================================================
+# The following code is to support the testing of the Proxy class.  No
+# changes should be necessary to anything below this comment.
+
+# Example class using in the proxy testing above.
+class Television
+  attr_accessor :channel
+
+  def power
+    @power = if @power == :on
+               :off
+             else
+               :on
+             end
+  end
+
+  def on?
+    @power == :on
+  end
+end
+
+# Tests for the Television class.  All of theses tests should pass.
+class TelevisionTest &lt; Neo::Koan
+  def test_it_turns_on
+    tv = Television.new
+
+    tv.power
+    assert tv.on?
+  end
+
+  def test_it_also_turns_off
+    tv = Television.new
+
+    tv.power
+    tv.power
+
+    assert !tv.on?
+  end
+
+  def test_edge_case_on_off
+    tv = Television.new
+
+    tv.power
+    tv.power
+    tv.power
+
+    assert tv.on?
+
+    tv.power
+
+    assert !tv.on?
+  end
+
+  def test_can_set_the_channel
+    tv = Television.new
+
+    tv.channel = 11
+    assert_equal 11, tv.channel
+  end
+end
+</code>
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- JavaScripts -->
+    <script src='../assets/javascripts/jquery.min.js'></script>
+    <script src='../assets/javascripts/jquery.tablesorter.min.js'></script>
+    <script src='../assets/javascripts/jquery.scrollTo.min.js'></script>
+    <script src='../assets/javascripts/jquery.timeago.js'></script>
+    <script src='../assets/javascripts/highcharts.src-4.0.1.js'></script>
+    <script src='../assets/javascripts/prettify.js'></script>
+    <script src='../assets/javascripts/bootstrap.min.js'></script>
+    <script src='../assets/javascripts/application.js'></script>
+    <script src='../assets/javascripts/jquery.filtertable.min.js'></script>
+  </body>
+</html>

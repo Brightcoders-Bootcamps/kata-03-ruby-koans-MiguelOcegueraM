@@ -2,7 +2,9 @@
 
 require File.expand_path("#{File.dirname(__FILE__)}/neo")
 
+# AboutScope Class
 class AboutScope < Neo::Koan
+  # Module Jims
   module Jims
     class Dog
       def identify
@@ -11,6 +13,7 @@ class AboutScope < Neo::Koan
     end
   end
 
+  # Module Joes
   module Joes
     class Dog
       def identify
@@ -36,7 +39,7 @@ class AboutScope < Neo::Koan
   end
 
   # ------------------------------------------------------------------
-
+  # String Clas
   class String
   end
 
