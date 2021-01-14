@@ -1,4 +1,6 @@
-require File.expand_path(File.dirname(__FILE__) + '/neo')
+# frozen_string_literal: true
+
+require File.expand_path("#{File.dirname(__FILE__)}/neo")
 
 class AboutClassMethods < Neo::Koan
   class Dog
@@ -40,7 +42,7 @@ class AboutClassMethods < Neo::Koan
     def fido.wag
       :fidos_wag
     end
-    
+
     assert_raise(NoMethodError) do
       rover.wag
     end
@@ -80,15 +82,15 @@ class AboutClassMethods < Neo::Koan
 
   def test_classes_and_instances_do_not_share_instance_variables
     fido = Dog.new
-    fido.name = "Fido"
-    assert_equal "Fido", fido.name
+    fido.name = 'Fido'
+    assert_equal 'Fido', fido.name
     assert_equal nil, Dog.name
   end
 
   # ------------------------------------------------------------------
 
   class Dog
-    def Dog.a_class_method
+    def self.a_class_method
       :dogs_class_method
     end
   end
@@ -158,7 +160,7 @@ class AboutClassMethods < Neo::Koan
   #
   # Which do you prefer and why?
   # Are there times you might prefer one over the other?
-  # 
+  #
   # Honestly, I prefer the first way beacause is more comfortable for me
   # than the second
   # ------------------------------------------------------------------
@@ -167,5 +169,4 @@ class AboutClassMethods < Neo::Koan
     fido = Dog.new
     assert_equal :still_another_way, fido.class.another_class_method
   end
-
 end
