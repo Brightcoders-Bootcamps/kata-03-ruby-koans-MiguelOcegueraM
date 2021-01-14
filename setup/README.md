@@ -17,6 +17,7 @@ Sigue los siguientes pasos para que puedas ejecutar y programa The Gilded Rose:
 ## Herramientas utilizadas
 ---
 - RSpec
+- Reek
 - Rubocop: ![Gem Version](https://badge.fury.io/rb/rubocop.svg)
 - Rubycritic: ![Gem Version](https://badge.fury.io/rb/rubycritic.svg)
 - Sandimeter: ![Gem Version](https://badge.fury.io/rb/sandi_meter.png)
