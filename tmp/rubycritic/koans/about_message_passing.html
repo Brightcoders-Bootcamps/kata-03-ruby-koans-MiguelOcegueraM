@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Ruby Critic - Home</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- StyleSheets -->
+    <link href="../assets/stylesheets/bootstrap.min.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+    <link href="../assets/stylesheets/font-awesome.min.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+    <link href="../assets/stylesheets/prettify.custom_theme.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+    <link href="../assets/stylesheets/application.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+    <header class="navbar navbar-default navbar-fixed-top">
+      <a href="#menu-toggle" class="btn btn-default hidden-lg visible-sm-* hidden-md visible-xs-* pull-left" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a>
+      <a href="../overview.html"><img src="../assets/images/logo.png" alt="Ruby Critic Logo" title="Ruby Critic Logo" width="55"><span class="logo">RUBYCRITIC</span></a>
+      
+    </header>
+    <div id="wrapper">
+      <!-- Sidebar -->
+      <aside id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+          <li class="sidebar-item">
+            <a href="../overview.html" class="project-nav-item overview-nav"><i class="fa fa-dashboard"></i>Overview</a>
+          </li>
+          <li class="sidebar-item">
+            <a href="../code_index.html" class="project-nav-item code-index-nav"><i class="fa fa-code"></i>Code</a>
+          </li>
+          <li class="sidebar-item">
+            <a href="../smells_index.html" class="project-nav-item smells-index-nav"><i class="fa fa-warning"></i>Smells</a>
+          </li>
+          <li class="sidebar-item">
+            <a href="../simple_cov_index.html" class="project-nav-item coverage-index-nav"><i class="fa fa-umbrella"></i>Coverage</a>
+          </li>
+        </ul>
+      </aside>
+      <!-- /#sidebar-wrapper -->
+      <div id="page-content-wrapper">
+        <div class="container-fluid">
+          <div class="row">
+  <!--Page Title -->
+  <div class="Page_Title">
+    <div class="file-time">
+      <span class="committed-at">
+        
+          Updated <time class='js-timeago' datetime='2021-01-13 18:17:23 -0600'>2021-01-13 18:17:23 -0600</time>
+        
+      </span>
+    </div>
+    <div>
+      <h3><small>koans /</small> about_message_passing.rb</h3>
+    </div>
+  </div>
+  <!--End Page Title -->
+  <div class="Content_Wrapper">
+    <!-- code detail -->
+    <div class="code-top-detail clearfix row">
+      <div class="col-md-8">
+        <div class="row">
+          <div class="col-md-1">
+            <div class="rating c big">
+              C
+            </div>
+          </div>
+          <div class="code-statistics col-md-11">
+            <div class="col-md-3">
+              <div><span class="metric">185</span><small> lines of codes</small></div>
+              <div><span class="metric">18</span><small> methods</small></div>
+            </div>
+            <div class="col-md-3">
+              <div><span class="metric">6.4</span><small> complexity/method</small></div>
+              <div><span class="metric">3</span><small> churn</small></div>
+            </div>
+            <div class="col-md-3">
+              <div><span class="metric">116.08</span><small> complexity</small></div>
+              <div><span class="metric">0</span><small> duplications</small></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="code-tabs">
+          <ul class="nav nav-pills right-to-left">
+            <li><a href="#" id="toggle-code" class="toggle-button button">code</a></li>
+            <li class="active">
+              <a href="#" id="toggle-smells" class="toggle-button button">
+                0
+                smell
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <code class="prettyprint linenums lang-ruby file-code js-file-code"># frozen_string_literal: true
+
+require File.expand_path(&quot;#{File.dirname(__FILE__)}/neo&quot;)
+
+class AboutMessagePassing &lt; Neo::Koan
+  class MessageCatcher
+    def caught?
+      true
+    end
+  end
+
+  def test_methods_can_be_called_directly
+    mc = MessageCatcher.new
+
+    assert mc.caught?
+  end
+
+  def test_methods_can_be_invoked_by_sending_the_message
+    mc = MessageCatcher.new
+
+    assert mc.send(:caught?)
+  end
+
+  def test_methods_can_be_invoked_more_dynamically
+    mc = MessageCatcher.new
+
+    assert mc.send(&#39;caught?&#39;)
+    assert mc.send(&#39;caught?&#39;) # What do you need to add to the first string?
+    assert mc.send(&#39;CAUGHT?&#39;.downcase!) # What would you need to do to the string?
+  end
+
+  def test_send_with_underscores_will_also_send_messages
+    mc = MessageCatcher.new
+
+    assert_equal true, mc.__send__(:caught?)
+
+    # THINK ABOUT IT:
+    #
+    # Why does Ruby provide both send and __send__ ?
+  end
+
+  def test_classes_can_be_asked_if_they_know_how_to_respond
+    mc = MessageCatcher.new
+
+    assert_equal true, mc.respond_to?(:caught?)
+    assert_equal false, mc.respond_to?(:does_not_exist)
+  end
+
+  # ------------------------------------------------------------------
+
+  class MessageCatcher
+    def add_a_payload(*args)
+      args
+    end
+  end
+
+  def test_sending_a_message_with_arguments
+    mc = MessageCatcher.new
+
+    assert_equal [], mc.add_a_payload
+    assert_equal [], mc.send(:add_a_payload)
+
+    assert_equal [3, 4, nil, 6], mc.add_a_payload(3, 4, nil, 6)
+    assert_equal [3, 4, nil, 6], mc.send(:add_a_payload, 3, 4, nil, 6)
+  end
+
+  # NOTE:
+  #
+  # Both obj.msg and obj.send(:msg) sends the message named :msg to
+  # the object. We use &quot;send&quot; when the name of the message can vary
+  # dynamically (e.g. calculated at run time), but by far the most
+  # common way of sending a message is just to say: obj.msg.
+
+  # ------------------------------------------------------------------
+
+  class TypicalObject
+  end
+
+  def test_sending_undefined_messages_to_a_typical_object_results_in_errors
+    typical = TypicalObject.new
+
+    exception = assert_raise(NoMethodError) do
+      typical.foobar
+    end
+    assert_match(/foobar/, exception.message)
+  end
+
+  def test_calling_method_missing_causes_the_no_method_error
+    typical = TypicalObject.new
+
+    exception = assert_raise(NoMethodError) do
+      typical.method_missing(:foobar)
+    end
+    assert_match(/foobar/, exception.message)
+
+    # THINK ABOUT IT:
+    #
+    # If the method :method_missing causes the NoMethodError, then
+    # what would happen if we redefine method_missing?
+    #
+    # NOTE:
+    #
+    # In Ruby 1.8 the method_missing method is public and can be
+    # called as shown above. However, in Ruby 1.9 (and later versions)
+    # the method_missing method is private. We explicitly made it
+    # public in the testing framework so this example works in both
+    # versions of Ruby. Just keep in mind you can&#39;t call
+    # method_missing like that after Ruby 1.9 normally.
+    #
+    # Thanks.  We now return you to your regularly scheduled Ruby
+    # Koans.
+  end
+
+  # ------------------------------------------------------------------
+
+  class AllMessageCatcher
+    def method_missing(method_name, *args)
+      &quot;Someone called #{method_name} with &lt;#{args.join(&#39;, &#39;)}&gt;&quot;
+    end
+  end
+
+  def test_all_messages_are_caught
+    catcher = AllMessageCatcher.new
+
+    assert_equal &#39;Someone called foobar with &lt;&gt;&#39;, catcher.foobar
+    assert_equal &#39;Someone called foobaz with &lt;1&gt;&#39;, catcher.foobaz(1)
+    assert_equal &#39;Someone called sum with &lt;1, 2, 3, 4, 5, 6&gt;&#39;, catcher.sum(1, 2, 3, 4, 5, 6)
+  end
+
+  def test_catching_messages_makes_respond_to_lie
+    catcher = AllMessageCatcher.new
+
+    assert_nothing_raised do
+      catcher.any_method
+    end
+    assert_equal false, catcher.respond_to?(:any_method)
+  end
+
+  # ------------------------------------------------------------------
+
+  class WellBehavedFooCatcher
+    def method_missing(method_name, *args, &amp;block)
+      if method_name.to_s[0, 3] == &#39;foo&#39;
+        &#39;Foo to you too&#39;
+      else
+        super(method_name, *args, &amp;block)
+      end
+    end
+  end
+
+  def test_foo_method_are_caught
+    catcher = WellBehavedFooCatcher.new
+
+    assert_equal &#39;Foo to you too&#39;, catcher.foo_bar
+    assert_equal &#39;Foo to you too&#39;, catcher.foo_baz
+  end
+
+  def test_non_foo_messages_are_treated_normally
+    catcher = WellBehavedFooCatcher.new
+
+    assert_raise(NoMethodError) do
+      catcher.normal_undefined_method
+    end
+  end
+
+  # ------------------------------------------------------------------
+
+  # (note: just reopening class from above)
+  class WellBehavedFooCatcher
+    def respond_to?(method_name)
+      if method_name.to_s[0, 3] == &#39;foo&#39;
+        true
+      else
+        super(method_name)
+      end
+    end
+  end
+
+  def test_explicitly_implementing_respond_to_lets_objects_tell_the_truth
+    catcher = WellBehavedFooCatcher.new
+
+    assert_equal true, catcher.respond_to?(:foo_bar)
+    assert_equal false, catcher.respond_to?(:something_else)
+  end
+end
+</code>
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- JavaScripts -->
+    <script src='../assets/javascripts/jquery.min.js'></script>
+    <script src='../assets/javascripts/jquery.tablesorter.min.js'></script>
+    <script src='../assets/javascripts/jquery.scrollTo.min.js'></script>
+    <script src='../assets/javascripts/jquery.timeago.js'></script>
+    <script src='../assets/javascripts/highcharts.src-4.0.1.js'></script>
+    <script src='../assets/javascripts/prettify.js'></script>
+    <script src='../assets/javascripts/bootstrap.min.js'></script>
+    <script src='../assets/javascripts/application.js'></script>
+    <script src='../assets/javascripts/jquery.filtertable.min.js'></script>
+  </body>
+</html>

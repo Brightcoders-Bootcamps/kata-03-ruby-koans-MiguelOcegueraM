@@ -1,3 +1,7 @@
+## Rubycritic score
+![kata_badge](badges/rubycritic_badge_score.svg)
+
+
 ![BrightCoders logo](img/logo-bc.png)
 
 # Kata The Edgecase Ruby Koans

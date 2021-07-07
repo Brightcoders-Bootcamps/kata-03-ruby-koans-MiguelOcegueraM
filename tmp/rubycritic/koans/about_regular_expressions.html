@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Ruby Critic - Home</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- StyleSheets -->
+    <link href="../assets/stylesheets/bootstrap.min.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+    <link href="../assets/stylesheets/font-awesome.min.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+    <link href="../assets/stylesheets/prettify.custom_theme.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+    <link href="../assets/stylesheets/application.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+    <header class="navbar navbar-default navbar-fixed-top">
+      <a href="#menu-toggle" class="btn btn-default hidden-lg visible-sm-* hidden-md visible-xs-* pull-left" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a>
+      <a href="../overview.html"><img src="../assets/images/logo.png" alt="Ruby Critic Logo" title="Ruby Critic Logo" width="55"><span class="logo">RUBYCRITIC</span></a>
+      
+    </header>
+    <div id="wrapper">
+      <!-- Sidebar -->
+      <aside id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+          <li class="sidebar-item">
+            <a href="../overview.html" class="project-nav-item overview-nav"><i class="fa fa-dashboard"></i>Overview</a>
+          </li>
+          <li class="sidebar-item">
+            <a href="../code_index.html" class="project-nav-item code-index-nav"><i class="fa fa-code"></i>Code</a>
+          </li>
+          <li class="sidebar-item">
+            <a href="../smells_index.html" class="project-nav-item smells-index-nav"><i class="fa fa-warning"></i>Smells</a>
+          </li>
+          <li class="sidebar-item">
+            <a href="../simple_cov_index.html" class="project-nav-item coverage-index-nav"><i class="fa fa-umbrella"></i>Coverage</a>
+          </li>
+        </ul>
+      </aside>
+      <!-- /#sidebar-wrapper -->
+      <div id="page-content-wrapper">
+        <div class="container-fluid">
+          <div class="row">
+  <!--Page Title -->
+  <div class="Page_Title">
+    <div class="file-time">
+      <span class="committed-at">
+        
+          Updated <time class='js-timeago' datetime='2021-01-13 18:17:23 -0600'>2021-01-13 18:17:23 -0600</time>
+        
+      </span>
+    </div>
+    <div>
+      <h3><small>koans /</small> about_regular_expressions.rb</h3>
+    </div>
+  </div>
+  <!--End Page Title -->
+  <div class="Content_Wrapper">
+    <!-- code detail -->
+    <div class="code-top-detail clearfix row">
+      <div class="col-md-8">
+        <div class="row">
+          <div class="col-md-1">
+            <div class="rating c big">
+              C
+            </div>
+          </div>
+          <div class="code-statistics col-md-11">
+            <div class="col-md-3">
+              <div><span class="metric">162</span><small> lines of codes</small></div>
+              <div><span class="metric">27</span><small> methods</small></div>
+            </div>
+            <div class="col-md-3">
+              <div><span class="metric">4.2</span><small> complexity/method</small></div>
+              <div><span class="metric">3</span><small> churn</small></div>
+            </div>
+            <div class="col-md-3">
+              <div><span class="metric">112.86</span><small> complexity</small></div>
+              <div><span class="metric">0</span><small> duplications</small></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="code-tabs">
+          <ul class="nav nav-pills right-to-left">
+            <li><a href="#" id="toggle-code" class="toggle-button button">code</a></li>
+            <li class="active">
+              <a href="#" id="toggle-smells" class="toggle-button button">
+                0
+                smell
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <code class="prettyprint linenums lang-ruby file-code js-file-code"># frozen_string_literal: true
+
+require File.expand_path(&quot;#{File.dirname(__FILE__)}/neo&quot;)
+
+class AboutRegularExpressions &lt; Neo::Koan
+  def test_a_pattern_is_a_regular_expression
+    assert_equal Regexp, /pattern/.class
+  end
+
+  def test_a_regexp_can_search_a_string_for_matching_content
+    assert_equal &#39;match&#39;, &#39;some matching content&#39;[/match/]
+  end
+
+  def test_a_failed_match_returns_nil
+    assert_equal nil, &#39;some matching content&#39;[/missing/]
+  end
+
+  # ------------------------------------------------------------------
+
+  def test_question_mark_means_optional
+    assert_equal &#39;ab&#39;, &#39;abbcccddddeeeee&#39;[/ab?/]
+    assert_equal &#39;a&#39;, &#39;abbcccddddeeeee&#39;[/az?/]
+  end
+
+  def test_plus_means_one_or_more
+    assert_equal &#39;bccc&#39;, &#39;abbcccddddeeeee&#39;[/bc+/]
+  end
+
+  def test_asterisk_means_zero_or_more
+    assert_equal &#39;abb&#39;, &#39;abbcccddddeeeee&#39;[/ab*/]
+    assert_equal &#39;a&#39;, &#39;abbcccddddeeeee&#39;[/az*/]
+    assert_equal &#39;&#39;, &#39;abbcccddddeeeee&#39;[/z*/]
+
+    # THINK ABOUT IT:
+    #
+    # When would * fail to match?
+  end
+
+  # THINK ABOUT IT:
+  #
+  # We say that the repetition operators above are &quot;greedy.&quot;
+  #
+  # Why?
+
+  # ------------------------------------------------------------------
+
+  def test_the_left_most_match_wins
+    assert_equal &#39;a&#39;, &#39;abbccc az&#39;[/az*/]
+  end
+
+  # ------------------------------------------------------------------
+
+  def test_character_classes_give_options_for_a_character
+    animals = %w[cat bat rat zat]
+    assert_equal %w[cat bat rat], animals.select { |a| a[/[cbr]at/] }
+  end
+
+  def test_slash_d_is_a_shortcut_for_a_digit_character_class
+    assert_equal &#39;42&#39;, &#39;the number is 42&#39;[/[0123456789]+/]
+    assert_equal &#39;42&#39;, &#39;the number is 42&#39;[/\d+/]
+  end
+
+  def test_character_classes_can_include_ranges
+    assert_equal &#39;42&#39;, &#39;the number is 42&#39;[/[0-9]+/]
+  end
+
+  def test_slash_s_is_a_shortcut_for_a_whitespace_character_class
+    assert_equal &quot; \t\n&quot;, &quot;space: \t\n&quot;[/\s+/]
+  end
+
+  def test_slash_w_is_a_shortcut_for_a_word_character_class
+    # NOTE:  This is more like how a programmer might define a word.
+    assert_equal &#39;variable_1&#39;, &#39;variable_1 = 42&#39;[/[a-zA-Z0-9_]+/]
+    assert_equal &#39;variable_1&#39;, &#39;variable_1 = 42&#39;[/\w+/]
+  end
+
+  def test_period_is_a_shortcut_for_any_non_newline_character
+    assert_equal &#39;abc&#39;, &quot;abc\n123&quot;[/a.+/]
+  end
+
+  def test_a_character_class_can_be_negated
+    assert_equal &#39;the number is &#39;, &#39;the number is 42&#39;[/[^0-9]+/]
+  end
+
+  def test_shortcut_character_classes_are_negated_with_capitals
+    assert_equal &#39;the number is &#39;, &#39;the number is 42&#39;[/\D+/]
+    assert_equal &#39;space:&#39;, &quot;space: \t\n&quot;[/\S+/]
+    # ... a programmer would most likely do
+    assert_equal &#39; = &#39;, &#39;variable_1 = 42&#39;[/[^a-zA-Z0-9_]+/]
+    assert_equal &#39; = &#39;, &#39;variable_1 = 42&#39;[/\W+/]
+  end
+
+  # ------------------------------------------------------------------
+
+  def test_slash_a_anchors_to_the_start_of_the_string
+    assert_equal &#39;start&#39;, &#39;start end&#39;[/\Astart/]
+    assert_equal nil, &#39;start end&#39;[/\Aend/]
+  end
+
+  def test_slash_z_anchors_to_the_end_of_the_string
+    assert_equal &#39;end&#39;, &#39;start end&#39;[/end\z/]
+    assert_equal nil, &#39;start end&#39;[/start\z/]
+  end
+
+  def test_caret_anchors_to_the_start_of_lines
+    assert_equal &#39;2&#39;, &quot;num 42\n2 lines&quot;[/^\d+/]
+  end
+
+  def test_dollar_sign_anchors_to_the_end_of_lines
+    assert_equal &#39;42&#39;, &quot;2 lines\nnum 42&quot;[/\d+$/]
+  end
+
+  def test_slash_b_anchors_to_a_word_boundary
+    assert_equal &#39;vines&#39;, &#39;bovine vines&#39;[/\bvine./]
+  end
+
+  # ------------------------------------------------------------------
+
+  def test_parentheses_group_contents
+    assert_equal &#39;hahaha&#39;, &#39;ahahaha&#39;[/(ha)+/]
+  end
+
+  # ------------------------------------------------------------------
+
+  def test_parentheses_also_capture_matched_content_by_number
+    assert_equal &#39;Gray&#39;, &#39;Gray, James&#39;[/(\w+), (\w+)/, 1]
+    assert_equal &#39;James&#39;, &#39;Gray, James&#39;[/(\w+), (\w+)/, 2]
+  end
+
+  def test_variables_can_also_be_used_to_access_captures
+    assert_equal &#39;Gray, James&#39;, &#39;Name:  Gray, James&#39;[/(\w+), (\w+)/]
+    assert_equal &#39;Gray&#39;, Regexp.last_match(1)
+    assert_equal &#39;James&#39;, Regexp.last_match(2)
+  end
+
+  # ------------------------------------------------------------------
+
+  def test_a_vertical_pipe_means_or
+    grays = /(James|Dana|Summer) Gray/
+    assert_equal &#39;James Gray&#39;, &#39;James Gray&#39;[grays]
+    assert_equal &#39;Summer&#39;, &#39;Summer Gray&#39;[grays, 1]
+    assert_equal nil, &#39;Jim Gray&#39;[grays, 1]
+  end
+
+  # THINK ABOUT IT:
+  #
+  # Explain the difference between a character class ([...]) and alternation (|).
+
+  # ------------------------------------------------------------------
+
+  def test_scan_is_like_find_all
+    assert_equal %w[one two three], &#39;one two-three&#39;.scan(/\w+/)
+  end
+
+  def test_sub_is_like_find_and_replace
+    assert_equal &#39;one t-three&#39;, &#39;one two-three&#39;.sub(/(t\w*)/) { Regexp.last_match(1)[0, 1] }
+  end
+
+  def test_gsub_is_like_find_and_replace_all
+    assert_equal &#39;one t-t&#39;, &#39;one two-three&#39;.gsub(/(t\w*)/) { Regexp.last_match(1)[0, 1] }
+  end
+end
+</code>
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- JavaScripts -->
+    <script src='../assets/javascripts/jquery.min.js'></script>
+    <script src='../assets/javascripts/jquery.tablesorter.min.js'></script>
+    <script src='../assets/javascripts/jquery.scrollTo.min.js'></script>
+    <script src='../assets/javascripts/jquery.timeago.js'></script>
+    <script src='../assets/javascripts/highcharts.src-4.0.1.js'></script>
+    <script src='../assets/javascripts/prettify.js'></script>
+    <script src='../assets/javascripts/bootstrap.min.js'></script>
+    <script src='../assets/javascripts/application.js'></script>
+    <script src='../assets/javascripts/jquery.filtertable.min.js'></script>
+  </body>
+</html>
